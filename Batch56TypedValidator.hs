@@ -36,12 +36,12 @@ typedRedeemer :: () -> Integer -> ScriptContext -> Bool
 typedRedeemer _ redeemer _ = traceIfFalse "Wrong Redeemer!" (redeemer == 42)
 
 data Typed
-instance Script.ValidatorTyped Typed where
+instance Scripts.ValidatorTypes Typed where
     type instance DatumType Typed = ()
     type instance RedeemerType Typed = Integer
 
 typedValidator :: Scripts.TypedValidator Typed
-typedValidator = Scripts.mkTypedValidator 
+typedValidator = Scripts.mkTypedValidator @Typed
    $$(PlutusTx.compile [|| typedRedeemer ||])
    $$(PlutusTx.compile [|| wrap ||])
   where

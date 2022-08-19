@@ -73,7 +73,7 @@ grab redeemer = do
         lookups = Constraints.unspentOutputs utxos      <>                                           -- Tell where to find all the UTXOS
                   Constraints.otherScript validator                                                  -- and inform about the actual validator (the spending tx needs to provide the actual validator)
         tx :: TxConstraints Void Void                                                            
-        tx      = mconcat [mustSpendScriptOutput oref $ Redeemer $ Builtins.mkI redeemmer | oref <- orefs]  -- Define the TX giving constrains, one for each UTXO sitting on this addrs,
+        tx      = mconcat [mustSpendScriptOutput oref $ Redeemer $ Builtins.mkI redeemer | oref <- orefs]  -- Define the TX giving constrains, one for each UTXO sitting on this addrs,
                                                                                                      -- must provide a redeemer (ignored in this case)
     ledgerTx <- submitTxConstraintsWith @Void lookups tx                                             -- Allow the wallet to construct the tx with the necesary information
     void $ awaitTxConfirmed $ getCardanoTxId ledgerTx                                                -- Wait for confirmation
