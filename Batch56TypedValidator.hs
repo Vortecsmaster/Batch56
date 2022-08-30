@@ -7,7 +7,7 @@
 {-# LANGUAGE TypeFamilies        #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module Batch56TypedValidator where
+module Batch56ParametrizedVali where
 
 import           Control.Monad       hiding (fmap)
 import           Data.Map            as Map

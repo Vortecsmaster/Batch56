@@ -1,16 +1,20 @@
-{-# LANGUAGE FlexibleContexts    #-}
-{-# LANGUAGE NoImplicitPrelude   #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE TypeApplications    #-}
-{-# LANGUAGE TypeFamilies        #-}
-{-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE DataKinds             #-}
+{-# LANGUAGE DeriveAnyClass        #-}   
+{-# LANGUAGE DeriveGeneric         #-}  
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NoImplicitPrelude     #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeApplications      #-}
+{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE TypeOperators         #-}
 
-module Batch56ParametrizedValidator where
+module Batch56VestingContract where
 
 import           Control.Monad        hiding (fmap)
-import           Data.Aeson           (ToJSON, FromJSON)       --Nsb import
+import           Data.Aeson           (ToJSON, FromJSON)       
 import           Data.Map             as Map                  
 import           Data.Text            (Text)
 import           Data.Void            (Void)
@@ -106,7 +110,7 @@ grab dln = do
         else do
             let params = VestingParams
                          { beneficiary = pkh
-                         , releaseTime   = dln
+                         , releaseTime    = dln
                          }
             utxos <- utxosAt $ scrAddress params
             if Map.null utxos
