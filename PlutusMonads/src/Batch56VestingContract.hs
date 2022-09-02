@@ -20,10 +20,13 @@ import           Data.Text            (Text)
 import           Data.Void            (Void)
 import           GHC.Generics         (Generic)
 import           Plutus.Contract
-import           PlutusTx             (Data (..))
+import           Plutus.Trace.Emulator as Emulator
+import           Wallet.Emulator.Wallet
+import           PlutusTx            (Data (..))
 import qualified PlutusTx
 import           PlutusTx.Prelude     hiding (Semigroup(..), unless)
 import           Ledger               hiding (singleton)
+import           Ledger.Address
 import           Ledger.Constraints   (TxConstraints)
 import qualified Ledger.Constraints   as Constraints
 import qualified Ledger.Typed.Scripts as Scripts
@@ -134,3 +137,18 @@ endpoints = awaitPromise (give' `select` grab') >> endpoints
 
 mkSchemaDefinitions ''VestingSchema
 mkKnownCurrencies []
+
+-- SIMULATION
+
+test :: IO ()
+test = runEmulatorTraceIO $ do
+       h1 <- activateContractWallet (knownWallet 1) endpoints
+       h2 <- activateContractWallet (knownWallet 2) endpoints
+       callEndpoint @"give" h1 $ GiveParams
+                               { gpBeneficiary = PaymentPubKeyHash "80a4f45b56b88d1139da23bc4c3c75ec6d32943c087f250b86193ca7"
+                               , gpReleaseTime = 1596059091000 
+                               , gpAmount      = 5100000
+                               }
+       void $ Emulator.waitNSlots 10
+       callEndpoint @"grab" h2 1596059091000
+       void $ Emulator.waitNSlots 10
