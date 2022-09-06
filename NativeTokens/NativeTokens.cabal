@@ -15,7 +15,7 @@ library
     exposed-modules:  Batch56FreeMinting,
                       Batch56SignedMinting,
                       Batch56DeadlineMinting,
-                      Batch65NftMinting
+                      Batch56NftMinting
 
     build-depends:    base ^>=4.14.1.0
     		        , aeson
