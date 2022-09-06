@@ -1,0 +1,39 @@
+cabal-version:      2.4
+name:               NativeTokens
+version:            0.1.0.0
+synopsis:           Boostraped Cabal Project for NativeTokens examples
+homepage:
+license:            MIT
+license-file:       LICENSE
+author:             Roberto J. Cerrud
+maintainer:         vortecsmaster@vortecsla.com
+
+
+extra-source-files: CHANGELOG.md
+
+library
+    exposed-modules:  Batch56FreeMinting,
+                      Batch56SignedMinting,
+                      Batch56DeadlineMinting,
+                      Batch65NftMinting
+
+    build-depends:    base ^>=4.14.1.0
+    		        , aeson
+                    , bytestring -any
+                    , containers
+                    , bytestring
+                    , data-default
+                    , freer-extras
+                    , playground-common
+                    , plutus-contract
+                    , plutus-ledger
+                    , plutus-ledger-api
+                    , plutus-ledger-constraints
+                    , plutus-tx-plugin
+                    , plutus-tx
+                    , text
+
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    
+    ghc-options: -Wall -fobject-code -fno-ignore-interface-pragmas -fno-omit-interface-pragmas -fno-strictness -fno-spec-constr -fno-specialise
