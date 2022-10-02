@@ -152,8 +152,6 @@ solution guess = do
                                     void $ awaitTxConfirmed $ getCardanoTxId ledgerTx
                                     logInfo @String $ printf "Proposed solution is: %s" (show guess)       
 
-
-
 --SIMULATION
 
 test :: IO ()
