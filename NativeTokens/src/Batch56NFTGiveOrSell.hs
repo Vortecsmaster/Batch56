@@ -14,26 +14,27 @@
 
 module Batch56NFTGiveOrSell where
 
-import           Control.Monad          hiding (fmap)
-import           Data.Aeson             (ToJSON, FromJSON)
-import           Data.Map               as Map
-import           Data.Text              (Text)
-import           Data.Void              (Void)
+import           Control.Monad                  hiding (fmap)
+import           Data.Aeson                     (ToJSON, FromJSON)
+import           Data.Map                       as Map
+import           Data.Text                      (Text)
+import           Data.Void                      (Void)
 import           Data.Maybe
-import           GHC.Generics           (Generic)
-import           Plutus.Contract        as Contract
-import           Plutus.Trace.Emulator  as Emulator
+import           GHC.Generics                   (Generic)
+import           Plutus.Contract                as Contract
+import           Plutus.Trace.Emulator          as Emulator
 import qualified PlutusTx
-import           PlutusTx.Prelude       hiding (Semigroup(..), unless)
-import qualified PlutusTx.Builtins   as Builtins
-import           Ledger                 hiding (mint, singleton)
-import           Ledger.Constraints     as Constraints
-import qualified Ledger.Typed.Scripts   as Scripts
-import           Ledger.Ada             as Ada
-import           Ledger.Value           as Value
-import           Prelude                (IO, Show (..), String, Semigroup(..))
-import           Text.Printf            (printf)
+import           PlutusTx.Prelude               hiding (Semigroup(..), unless)
+import qualified PlutusTx.Builtins              as Builtins
+import           Ledger                         hiding (mint, singleton)
+import           Ledger.Constraints             as Constraints
+import qualified Ledger.Typed.Scripts           as Scripts
+import           Ledger.Ada                     as Ada
+import           Ledger.Value                   as Value
+import           Prelude                        (IO, Show (..), String, Semigroup(..))
+import           Text.Printf                    (printf)
 import           Wallet.Emulator.Wallet
+import           Control.Monad.Freer.Extras     as Extras
 import           CustomRedeemer
 
 --ON-CHAIN
@@ -112,13 +113,17 @@ test = runEmulatorTraceIO $ do
          w2 = knownWallet 2
      h1 <- activateContractWallet w1 endpoints
      h2 <- activateContractWallet w2 endpoints
+     Extras.logInfo $ "Address w1 is:  " ++ show (knownWallet 1)
      callEndpoint @"giveMint" h1 $ NFTParams { npTokenName   = "Batch56nft1" 
                                          , npAddress     = mockWalletAddress w1
                                          , npReciever    = mockWalletAddress w2
                                          }
      void $ Emulator.waitNSlots 10
-     callEndpoint @"giveMint" h2 $ NFTParams { npTokenName = "Batch56nft"
+     Extras.logInfo $ "Address w2 is:  " ++ show (knownWallet 2)
+     
+     callEndpoint @"giveMint" h2 $ NFTParams { npTokenName = "Batch56nft2"
                                          , npAddress   = mockWalletAddress w2
                                          , npReciever  = mockWalletAddress w1   
                                          }
-     void $ Emulator.waitNSlots 10
+     s <- Emulator.waitNSlots 11
+     Extras.logInfo $ "End of Simulation at slot " ++ show s
